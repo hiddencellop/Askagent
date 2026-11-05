@@ -1,0 +1,652 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>R Info Hub</title>
+<style>
+:root{--text:#f5f5f7;--muted:rgba(245,245,247,.62);--glass:rgba(255,255,255,.10);--glass2:rgba(255,255,255,.17);--border:rgba(255,255,255,.22);--accent:#0a84ff;--green:#30d158;--gold:#ffd60a}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html,body{min-height:100%}
+body{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","SF Pro Text","Helvetica Neue",Inter,Segoe UI,Roboto,sans-serif;color:var(--text);background:#05060d;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+.bg{position:fixed;inset:0;z-index:-1;overflow:hidden;background:#05060d}
+.blob{position:absolute;border-radius:50%;filter:blur(90px);opacity:.6;animation:float 18s ease-in-out infinite}
+.b1{width:520px;height:520px;background:#0a84ff;top:-140px;left:-140px}
+.b2{width:460px;height:460px;background:#bf5af2;bottom:-120px;right:-100px;animation-delay:-6s}
+.b3{width:360px;height:360px;background:#ff375f;top:45%;left:55%;animation-delay:-12s;opacity:.35}
+@keyframes float{0%,100%{transform:translate(0,0) scale(1)}50%{transform:translate(60px,-50px) scale(1.15)}}
+.glass{background:var(--glass);backdrop-filter:blur(28px) saturate(180%);-webkit-backdrop-filter:blur(28px) saturate(180%);border:1px solid var(--border);box-shadow:0 8px 32px rgba(0,0,0,.35),inset 0 1px 0 rgba(255,255,255,.25);border-radius:22px}
+
+/* header */
+header{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:14px 18px;max-width:1000px;margin:10px auto 0}
+.brand{font-size:19px;font-weight:700;letter-spacing:-.3px;padding:9px 16px;border-radius:999px}
+.live{display:flex;align-items:center;gap:8px;padding:8px 14px;border-radius:999px;font-size:14px;font-weight:600}
+.dot{width:9px;height:9px;border-radius:50%;background:var(--green);box-shadow:0 0 10px var(--green);animation:pulse 1.6s infinite}
+@keyframes pulse{50%{opacity:.3}}
+#liveCount{display:inline-block;min-width:2ch;text-align:right;font-variant-numeric:tabular-nums}
+#liveCount.tick{animation:tick .45s}
+@keyframes tick{0%{transform:translateY(-6px);opacity:0}100%{transform:none;opacity:1}}
+
+/* notice board */
+.notice{max-width:1000px;margin:8px auto 0;padding:0 18px}
+.notice-in{display:flex;align-items:center;gap:10px;padding:8px 8px 8px 16px;border-radius:999px}
+.notice-in .tag{font-size:11px;font-weight:700;letter-spacing:.8px;color:var(--gold);text-transform:uppercase}
+.notice-in .txt{flex:1;font-size:13px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.prem{display:flex;align-items:center;gap:6px;border:none;cursor:pointer;color:#1c1400;font-weight:700;font-size:12px;padding:7px 12px;border-radius:999px;background:linear-gradient(135deg,#ffe066,#ffb300);box-shadow:0 0 18px rgba(255,200,0,.45);transition:.2s}
+.prem:hover{transform:scale(1.06)}
+.prem svg{width:16px;height:16px;animation:shine 2.4s ease-in-out infinite}
+@keyframes shine{50%{transform:rotate(-12deg) scale(1.15)}}
+
+main{max-width:1000px;margin:0 auto;padding:6px 18px 110px}
+.view{animation:slideIn .35s cubic-bezier(.2,.8,.2,1) both}
+.view.back{animation-name:slideBack}
+@keyframes slideIn{from{opacity:0;transform:translateX(40px)}}
+@keyframes slideBack{from{opacity:0;transform:translateX(-40px)}}
+
+/* home */
+.hero{text-align:center;padding:26px 10px 18px}
+.hero h1{font-size:clamp(30px,6vw,52px);font-weight:800;letter-spacing:-1.4px;background:linear-gradient(180deg,#fff,rgba(255,255,255,.62));-webkit-background-clip:text;background-clip:text;color:transparent}
+.hero p{color:var(--muted);margin-top:8px;font-size:16px}
+.tiles{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:12px;margin-top:10px}
+.tile{position:relative;cursor:pointer;text-align:center;padding:16px 10px 14px;color:var(--text);font:inherit;transition:.25s;border-radius:22px}
+.tile:hover{transform:translateY(-4px);background:var(--glass2)}
+.tile:active{transform:scale(.97)}
+.tile .num{position:absolute;top:8px;left:12px;font-size:11px;color:var(--muted);font-weight:600}
+.tile .ico{width:56px;height:56px;margin:0 auto 8px}
+.tile .nm{font-weight:700;font-size:16px;letter-spacing:-.2px}
+.tile .sb{font-size:11px;color:var(--muted);margin-top:3px}
+
+/* tool page */
+.navbar{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;padding:10px 0 6px}
+.backbtn{justify-self:start;display:flex;align-items:center;gap:2px;background:var(--glass);border:1px solid var(--border);color:#64d2ff;font:inherit;font-weight:600;font-size:16px;cursor:pointer;padding:8px 14px 8px 8px;border-radius:999px;backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px)}
+.backbtn svg{width:20px;height:20px}
+.navtitle{font-weight:700;font-size:17px}
+.panel{padding:24px;margin-top:12px}
+.panel .bigico{width:86px;height:86px;margin:0 auto 10px}
+.panel h2{text-align:center;font-size:26px;letter-spacing:-.5px}
+.panel .desc{text-align:center;color:var(--muted);margin:4px 0 20px;font-size:14px}
+.row{display:flex;gap:10px;flex-wrap:wrap}
+.input{flex:1;min-width:190px;padding:15px 18px;border-radius:16px;border:1px solid var(--border);background:rgba(0,0,0,.28);color:var(--text);font-size:16px;outline:none;transition:.2s;text-transform:uppercase}
+.input.nolower{text-transform:none}
+.input:focus{border-color:var(--accent);box-shadow:0 0 0 4px rgba(10,132,255,.25)}
+.input::placeholder{color:rgba(255,255,255,.4);text-transform:none}
+.btn{padding:15px 26px;border:none;border-radius:16px;background:var(--accent);color:#fff;font-weight:600;font-size:16px;cursor:pointer;transition:.2s}
+.btn:hover{filter:brightness(1.15);transform:scale(1.03)}
+.btn:disabled{opacity:.5;cursor:wait;transform:none}
+#result{margin-top:20px}
+.status{padding:15px 18px;border-radius:16px;font-size:14px}
+.status.err{background:rgba(255,69,58,.18);border:1px solid rgba(255,69,58,.5)}
+.status.warn{background:rgba(255,159,10,.16);border:1px solid rgba(255,159,10,.5)}
+.status.info{background:rgba(255,255,255,.08);border:1px solid var(--border);color:var(--muted)}
+.status .msg{font-weight:600;margin-bottom:4px}
+.status .hint{color:var(--muted);font-size:13px}
+.status .raw{margin-top:8px;font-size:11px;color:rgba(255,255,255,.45);font-family:ui-monospace,SFMono-Regular,Menlo,monospace;word-break:break-all}
+.retry{margin-top:12px;padding:10px 18px;border-radius:12px;border:1px solid var(--border);background:rgba(255,255,255,.12);color:var(--text);font:inherit;font-weight:600;font-size:14px;cursor:pointer}
+.retry:hover{background:rgba(255,255,255,.2)}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:10px}
+.item{padding:13px 15px;border-radius:16px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);animation:in .4s both}
+@keyframes in{from{opacity:0;transform:translateY(10px)}}
+.item .k{font-size:11px;text-transform:uppercase;letter-spacing:.8px;color:var(--muted)}
+.item .v{font-size:16px;font-weight:600;margin-top:4px;word-break:break-word}
+.item .v img{max-width:100%;border-radius:12px}
+.item .v a{color:#64d2ff}
+.hero-answer{padding:20px;margin-bottom:12px;border-radius:20px;background:linear-gradient(135deg,rgba(10,132,255,.35),rgba(191,90,242,.3));border:1px solid var(--border)}
+.hero-answer .k{font-size:12px;text-transform:uppercase;letter-spacing:1px;color:rgba(255,255,255,.75)}
+.hero-answer .v{font-size:30px;font-weight:700;margin-top:6px;word-break:break-word}
+.rescredit{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:6px;margin-bottom:12px;padding:10px 14px;border-radius:14px;background:rgba(48,209,88,.14);border:1px solid rgba(48,209,88,.4);font-size:13px}
+.rescredit b{color:#fff}
+details{margin-top:12px}summary{cursor:pointer;color:var(--muted);font-size:13px}
+pre{margin-top:8px;padding:14px;border-radius:14px;background:rgba(0,0,0,.4);font-size:12px;overflow:auto;max-height:280px}
+.spinner{width:18px;height:18px;border:3px solid rgba(255,255,255,.3);border-top-color:#fff;border-radius:50%;animation:spin .8s linear infinite;display:inline-block;vertical-align:middle;margin-right:8px}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* family card */
+.fam{border-radius:20px;overflow:hidden;border:1px solid var(--border);background:linear-gradient(180deg,rgba(255,255,255,.10),rgba(255,255,255,.03));margin-bottom:4px;animation:in .4s both}
+.fam-top{padding:16px 18px;background:linear-gradient(135deg,rgba(10,132,255,.30),rgba(191,90,242,.22));border-bottom:1px solid var(--border)}
+.fam-title{font-size:19px;font-weight:800;letter-spacing:-.3px}
+.fam-sub{font-size:12px;color:rgba(255,255,255,.72);margin-top:3px}
+.chips{display:flex;flex-wrap:wrap;gap:6px;padding:12px 18px}
+.chip{font-size:12px;padding:5px 10px;border-radius:999px;background:rgba(255,255,255,.09);border:1px solid rgba(255,255,255,.14)}
+.chip b{color:var(--muted);font-weight:600;margin-right:4px}
+.sectitle{padding:12px 18px 4px;font-size:11px;letter-spacing:.9px;text-transform:uppercase;color:var(--muted)}
+.mem{display:flex;align-items:center;gap:11px;padding:10px 18px;border-top:1px solid rgba(255,255,255,.07)}
+.mem.head{background:rgba(48,209,88,.10)}
+.ava{width:34px;height:34px;flex:none;border-radius:50%;display:grid;place-items:center;font-weight:800;font-size:14px;background:rgba(255,255,255,.14)}
+.mem.head .ava{background:linear-gradient(135deg,#30d158,#0a84ff)}
+.mn{font-weight:600;font-size:15px}
+.mr{font-size:12px;color:var(--muted)}
+.mem.head .mr{color:#7dff9b;font-weight:700}
+.fam-foot{padding:11px 18px;font-size:12px;color:var(--muted);border-top:1px solid rgba(255,255,255,.07)}
+
+/* footer */
+footer{position:fixed;left:0;right:0;bottom:0;display:flex;flex-direction:column;align-items:center;gap:3px;padding:12px;background:rgba(10,10,20,.45);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);border-top:1px solid var(--border);z-index:5}
+#rotator{font-weight:800;letter-spacing:3px;font-size:15px;text-transform:uppercase;transition:opacity .35s,transform .35s;background:linear-gradient(90deg,#64d2ff,#bf5af2,#ff375f);-webkit-background-clip:text;background-clip:text;color:transparent}
+#rotator.hide{opacity:0;transform:translateY(6px)}
+.credit{font-size:12px;color:var(--muted)}.credit b{color:var(--text)}
+
+/* modal + admin */
+.overlay{position:fixed;inset:0;z-index:20;display:none;align-items:center;justify-content:center;padding:18px;background:rgba(0,0,0,.55);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
+.overlay.open{display:flex;animation:fade .25s}
+@keyframes fade{from{opacity:0}}
+.modal{width:100%;max-width:420px;padding:26px;max-height:88vh;overflow:auto;animation:pop .35s cubic-bezier(.2,.9,.3,1.3)}
+@keyframes pop{from{transform:scale(.88);opacity:0}}
+.modal h3{font-size:22px;text-align:center}
+.modal .sub{text-align:center;color:var(--muted);font-size:13px;margin:6px 0 18px}
+.modal .lock{width:54px;height:54px;margin:0 auto 10px;display:block}
+.shake{animation:shake .4s}
+@keyframes shake{20%,60%{transform:translateX(-8px)}40%,80%{transform:translateX(8px)}}
+.pwerr{color:#ff6961;font-size:13px;text-align:center;margin-top:10px;min-height:18px}
+.close{display:block;margin:14px auto 0;background:none;border:none;color:var(--muted);cursor:pointer;font:inherit;font-size:14px}
+.adm{max-width:640px}
+.adm-head{display:flex;justify-content:space-between;align-items:center}
+.adm-head .pill{font-size:11px;font-weight:700;color:#1c1400;background:linear-gradient(135deg,#ffe066,#ffb300);padding:4px 10px;border-radius:999px}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:16px 0}
+.stat{padding:12px;border-radius:14px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);text-align:center}
+.stat .n{font-size:22px;font-weight:800}.stat .l{font-size:11px;color:var(--muted)}
+.adm h4{font-size:13px;text-transform:uppercase;letter-spacing:.8px;color:var(--muted);margin:14px 0 8px}
+.arow{display:flex;justify-content:space-between;align-items:center;padding:10px 12px;border-radius:12px;background:rgba(255,255,255,.06);margin-bottom:6px;font-size:14px}
+.badge{font-size:11px;font-weight:700;padding:3px 9px;border-radius:999px}
+.badge.ok{background:rgba(48,209,88,.25);color:#7dff9b}.badge.no{background:rgba(255,159,10,.25);color:#ffcf70}.badge.bk{background:rgba(10,132,255,.25);color:#9ecbff}
+.sw{width:44px;height:26px;border-radius:999px;background:rgba(255,255,255,.2);position:relative;cursor:pointer;transition:.25s;flex:none}
+.sw::after{content:"";position:absolute;top:3px;left:3px;width:20px;height:20px;border-radius:50%;background:#fff;transition:.25s}
+.sw.on{background:var(--green)}.sw.on::after{left:21px}
+
+/* animated icons */
+.ico svg{width:100%;height:100%;overflow:visible}
+.flame{transform-origin:50% 90%;animation:flick 1.1s ease-in-out infinite}
+.flame2{transform-origin:50% 90%;animation:flick 0.8s ease-in-out infinite reverse}
+@keyframes flick{0%,100%{transform:scale(1,1) rotate(-2deg)}50%{transform:scale(.92,1.1) rotate(2deg)}}
+.bar{transform-origin:50% 100%;animation:grow 2s ease-in-out infinite}
+.bar:nth-of-type(2){animation-delay:.25s}.bar:nth-of-type(3){animation-delay:.5s}.bar:nth-of-type(4){animation-delay:.75s}
+@keyframes grow{0%,100%{transform:scaleY(.45)}50%{transform:scaleY(1)}}
+.cursor{animation:blink 1s steps(1) infinite}
+@keyframes blink{50%{opacity:0}}
+.typeln{stroke-dasharray:30;animation:typ 2.4s ease-in-out infinite}
+@keyframes typ{0%{stroke-dashoffset:30}60%,100%{stroke-dashoffset:0}}
+.pulsering{transform-origin:50% 50%;animation:ring 2s ease-out infinite}
+@keyframes ring{0%{transform:scale(.6);opacity:.9}100%{transform:scale(1.4);opacity:0}}
+.spin{transform-origin:50% 50%;animation:spin 8s linear infinite}
+.bounce{animation:bnc 1.2s ease-in-out infinite}
+@keyframes bnc{50%{transform:translateY(-6px)}}
+.zap{animation:zp 1.4s ease-in-out infinite;transform-origin:50% 50%}
+@keyframes zp{0%,100%{transform:scale(1);filter:drop-shadow(0 0 0 #ffd60a)}50%{transform:scale(1.12);filter:drop-shadow(0 0 8px #ffd60a)}}
+.coin{animation:coin 2.2s ease-in-out infinite;transform-origin:50% 50%}
+@keyframes coin{0%,100%{transform:scaleX(1)}50%{transform:scaleX(.15)}}
+.scan{animation:scan 2.2s ease-in-out infinite}
+@keyframes scan{0%,100%{transform:translateY(0)}50%{transform:translateY(26px)}}
+.wave{animation:wv 1.6s ease-in-out infinite;transform-origin:50% 50%}
+@keyframes wv{0%,100%{opacity:.3}50%{opacity:1}}
+@media(max-width:520px){.stats{grid-template-columns:1fr 1fr 1fr}.brand{font-size:16px}}
+</style>
+</head>
+<body>
+<div class="bg"><div class="blob b1"></div><div class="blob b2"></div><div class="blob b3"></div></div>
+
+<header>
+  <div class="brand glass" id="brand"></div>
+  <div class="live glass"><span class="dot"></span><span><span id="liveCount">--</span> live</span></div>
+</header>
+
+<div class="notice"><div class="notice-in glass">
+  <span class="tag">Notice</span>
+  <span class="txt" id="noticeTxt"></span>
+  <button class="prem" id="premBtn" title="Premium">
+    <svg viewBox="0 0 24 24" fill="currentColor"><path d="M3 8l4.5 4L12 5l4.5 7L21 8l-2 11H5L3 8z"/></svg>Premium
+  </button>
+</div></div>
+
+<main id="app"></main>
+
+<footer>
+  <div id="rotator">Hack</div>
+  <div class="credit">Developed by <b id="dev"></b></div>
+</footer>
+
+<div class="overlay" id="overlay">
+  <div class="modal glass" id="modal"></div>
+</div>
+
+<script>
+/* =====================================================================
+   ⚙️  CONFIG
+   ===================================================================== */
+const SITE = {
+  name: "R Info Hub",
+  heroTitle: "Find anything. Instantly.",
+  heroSub: "Choose a tool, enter the value, get details.",
+  developer: "Raj",
+  notice: "6 tools live — Aadhaar, Vehicle, PAN, TG & UPI."
+};
+const LABELS = { A: "Value", B: "Result" };
+const ADMIN_PASSWORD = "admin123";
+
+const TOOLS = [
+  { id:"t1", icon:"pin",   A:"Aadhaar",    B:"Family Info",  ph:"202372727238", norm:"digits", rule:"aadhaar", render:renderFamily,
+    apiUrl:"https://leakinfo.pro/api/family_drk.php?key=DARKDEMO&aadhar={A}", method:"GET", headers:{}, body:null, resultKey:"" },
+
+  { id:"t2", icon:"globe", A:"Vehicle No", B:"Vehicle Info", ph:"GJ14X8960", norm:"alnum", rule:"vehicle",
+    apiUrl:"https://leakinfo.pro/api/vehicle.php?key=DARK1b55e9d0&vehicle={A}", method:"GET", headers:{}, body:null, resultKey:"owner" },
+
+  { id:"t3", icon:"bolt",  A:"Vehicle No", B:"Owner Number", ph:"GJ14X8960", norm:"alnum", rule:"vehicle", fallback:"t7",
+    apiUrl:"https://leakinfo.pro/api/vehicle_v5.php?key=DARK9a3e771e&vehicle={A}", method:"GET", headers:{}, body:null, resultKey:"mobile_number" },
+
+  { id:"t4", icon:"shield",A:"PAN",        B:"PAN Info",     ph:"AAMTS3432L", norm:"alnum", rule:"pan",
+    apiUrl:"https://leakinfo.pro/api/pan.php?key=DARK9af88c67&pan={A}", method:"GET", headers:{}, body:null, resultKey:"name" },
+
+  { id:"t5", icon:"hack",  A:"TG User ID", B:"TG Info",      ph:"6345665299", norm:"digits", rule:"num",
+    apiUrl:"https://leakinfo.pro/api/tg_userid.php?key=DARKdbcccc45&userid={A}", method:"GET", headers:{}, body:null, resultKey:"" },
+
+  { id:"t6", icon:"chart", A:"UPI ID",     B:"UPI Info",     ph:"rajubhai@upi", norm:"upi", rule:"upi",
+    apiUrl:"https://leakinfo.pro/api/upi.php?key=DARK36a8997d&upi_id={A}", method:"GET", headers:{}, body:null, resultKey:"account_holder_name" },
+
+  { id:"t7", icon:"fire",  A:"Vehicle No", B:"Owner Number", ph:"GJ14X8960", norm:"alnum", rule:"vehicle", fallback:"t3", hidden:true,
+    apiUrl:"https://leakinfo.pro/api/vehicle_v6.php?key=DARK9e485b5b&vehicle={A}", method:"GET", headers:{}, body:null, resultKey:"mobile_number" }
+];
+
+const VISIBLE = TOOLS.filter(t => !t.hidden);
+const toolNo = t => { const i = VISIBLE.indexOf(t); return i < 0 ? null : i + 1; };
+
+/* wrapper keys jo path me nahi dikhne chahiye */
+const META = new Set([
+  "data","response","parameters","family_drk_info","value","service",
+  "developer","owner","rate_limits","key_expiry","success","timestamp","query",
+  "response_time_seconds","cache_age_seconds","cached","chassis_source",
+  "transKey","id","rtoId","vehicleId","manufacturerId","variantID","fuelId","dataStatus","orderBy","rtoid","combindID","isActive"
+]);
+const isEmpty = v => v === null || v === undefined || v === "" || (typeof v === "string" && !v.trim()) || (Array.isArray(v) && !v.length);
+
+const NORMS = {
+  alnum:  v => v.toUpperCase().replace(/[^A-Z0-9]/g, ""),
+  digits: v => v.replace(/\D/g, ""),
+  upi:    v => v.trim().toLowerCase().replace(/\s+/g, "")
+};
+const RULES = {
+  vehicle: { re:/^[A-Z]{2}[0-9]{1,2}[A-Z]{1,3}[0-9]{4}$/, hint:"Format: GJ14X8960 — state code, RTO, series, 4 digits." },
+  pan:     { re:/^[A-Z]{5}[0-9]{4}[A-Z]$/,                 hint:"Format: AAMTS3432L — 5 letters, 4 digits, 1 letter." },
+  aadhaar: { re:/^[0-9]{12}$/,                             hint:"Aadhaar must be exactly 12 digits." },
+  num:     { re:/^[0-9]{5,15}$/,                           hint:"Digits only — numeric ID." },
+  upi:     { re:/^[a-z0-9.\-_]{2,}@[a-z]{2,}$/,            hint:"Format: name@bank" }
+};
+
+const ROTATING_WORDS = ["Hack", "Crack", "Go"];
+const ROTATE_EVERY_MS = 1800;
+const LIVE_MIN = 20, LIVE_MAX = 80, LIVE_START = 60;
+const LIVE_EVERY_MS = [5000, 10000];
+const REQUEST_TIMEOUT_MS = 20000;
+/* ===================== CONFIG END ===================== */
+
+
+/* ---------- animated icons ---------- */
+const ICONS = {
+fire:`<svg viewBox="0 0 64 64"><defs><linearGradient id="gf" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="#ff375f"/><stop offset="1" stop-color="#ff9f0a"/></linearGradient></defs>
+<path class="flame" d="M32 6c3 10 14 16 14 30a14 14 0 0 1-28 0c0-8 5-11 7-17 3 3 4 6 4 9 4-5 4-14 3-22z" fill="url(#gf)"/>
+<path class="flame2" d="M32 30c2 5 7 8 7 14a7 7 0 0 1-14 0c0-4 4-6 7-14z" fill="#ffd60a"/></svg>`,
+chart:`<svg viewBox="0 0 64 64"><g fill="#30d158"><rect class="bar" x="8" y="30" width="9" height="26" rx="3"/><rect class="bar" x="21" y="18" width="9" height="38" rx="3" fill="#64d2ff"/><rect class="bar" x="34" y="24" width="9" height="32" rx="3" fill="#0a84ff"/><rect class="bar" x="47" y="8" width="9" height="48" rx="3" fill="#bf5af2"/></g></svg>`,
+hack:`<svg viewBox="0 0 64 64"><rect x="5" y="9" width="54" height="46" rx="9" fill="rgba(0,0,0,.55)" stroke="#30d158" stroke-width="2.5"/>
+<path d="M14 24l9 7-9 7" fill="none" stroke="#30d158" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+<line class="typeln" x1="28" y1="39" x2="42" y2="39" stroke="#30d158" stroke-width="4" stroke-linecap="round"/>
+<rect class="cursor" x="45" y="33" width="6" height="12" fill="#30d158"/></svg>`,
+shield:`<svg viewBox="0 0 64 64"><circle class="pulsering" cx="32" cy="32" r="26" fill="none" stroke="#0a84ff" stroke-width="3"/>
+<path d="M32 6l20 7v16c0 14-9 24-20 28C21 53 12 43 12 29V13z" fill="#0a84ff"/>
+<path d="M22 32l8 8 13-15" fill="none" stroke="#fff" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
+globe:`<svg viewBox="0 0 64 64"><circle cx="32" cy="32" r="26" fill="#0a84ff"/><g class="spin" fill="none" stroke="#fff" stroke-width="2.5" opacity=".85"><ellipse cx="32" cy="32" rx="11" ry="26"/><ellipse cx="32" cy="32" rx="22" ry="26" opacity=".5"/></g>
+<g fill="none" stroke="#fff" stroke-width="2.5" opacity=".85"><line x1="6" y1="32" x2="58" y2="32"/><path d="M10 20h44M10 44h44"/></g></svg>`,
+pin:`<svg viewBox="0 0 64 64"><ellipse class="wave" cx="32" cy="55" rx="16" ry="5" fill="#ff375f" opacity=".5"/><g class="bounce"><path d="M32 6c-11 0-19 8-19 19 0 14 19 31 19 31s19-17 19-31C51 14 43 6 32 6z" fill="#ff375f"/><circle cx="32" cy="25" r="8" fill="#fff"/></g></svg>`,
+bolt:`<svg viewBox="0 0 64 64"><g class="zap"><path d="M36 4L12 36h16l-4 24 28-34H35z" fill="#ffd60a"/></g></svg>`
+};
+const ico = k => ICONS[k] || ICONS.bolt;
+
+/* ---------- helpers ---------- */
+const $ = id => document.getElementById(id);
+const esc = s => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const A_of = t => t.A ?? LABELS.A;
+const B_of = t => t.B ?? LABELS.B;
+const phOf = t => t.ph || `Enter ${A_of(t)}`;
+const nameOf = t => `${A_of(t)} to ${B_of(t)}`;
+const apiSet = t => t.apiUrl && !t.apiUrl.includes("PASTE_API");
+
+document.title = SITE.name;
+$("brand").textContent = SITE.name;
+$("dev").textContent = SITE.developer;
+$("noticeTxt").textContent = SITE.notice;
+
+/* ---------- views ---------- */
+let goingBack = false;
+function homeView(){
+  return `<div class="view ${goingBack?'back':''}">
+    <section class="hero"><h1>${esc(SITE.heroTitle)}</h1><p>${esc(SITE.heroSub)}</p></section>
+    <div class="tiles">${VISIBLE.map((t,i)=>`
+      <button class="tile glass" data-id="${t.id}">
+        <span class="num">#${i+1}</span>
+        <div class="ico">${ico(t.icon)}</div>
+        <div class="nm">${esc(nameOf(t))}</div>
+        <div class="sb">Enter ${esc(A_of(t))} → get ${esc(B_of(t))}</div>
+      </button>`).join("")}</div>
+  </div>`;
+}
+function toolView(t){
+  const n = toolNo(t);
+  const lower = t.norm === "upi" ? " nolower" : "";
+  return `<div class="view">
+    <div class="navbar">
+      <button class="backbtn" id="back"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg>Back</button>
+      <div class="navtitle">Tool #${n ?? "backup"}</div><div></div>
+    </div>
+    <section class="panel glass">
+      <div class="bigico ico">${ico(t.icon)}</div>
+      <h2>${esc(nameOf(t))}</h2>
+      <p class="desc">Enter ${esc(A_of(t))} to get ${esc(B_of(t))} and more details.</p>
+      <form class="row" id="form">
+        <input class="input${lower}" id="q" autocomplete="off" placeholder="${esc(phOf(t))}" required>
+        <button class="btn" id="go" type="submit">Search</button>
+      </form>
+      <div id="result"></div>
+    </section>
+  </div>`;
+}
+function render(){
+  const m = location.hash.match(/^#tool-(\w+)/);
+  const t = m && TOOLS.find(x => x.id === m[1]);
+  $("app").innerHTML = t ? toolView(t) : homeView();
+  window.scrollTo(0,0);
+  if(t){
+    $("back").onclick = () => { goingBack = true; history.length > 1 ? history.back() : (location.hash = ""); };
+    $("form").onsubmit = e => { e.preventDefault(); run(t); };
+  } else {
+    document.querySelectorAll(".tile").forEach(b => b.onclick = () => { goingBack = false; location.hash = "tool-" + b.dataset.id; });
+  }
+  goingBack = false;
+}
+window.addEventListener("hashchange", render);
+
+/* ---------- search flow ---------- */
+async function run(t){
+  const raw = $("q").value.trim();
+  if(!raw) return;
+
+  const value = t.norm ? NORMS[t.norm](raw) : raw;
+  const rule = RULES[t.rule];
+  if(rule && !rule.re.test(value)){
+    $("result").innerHTML = `<div class="status warn"><div class="msg">Check the ${esc(A_of(t))}</div>
+      <div class="hint">${esc(rule.hint)}</div><div class="raw">You entered: ${esc(raw)}</div></div>`;
+    return;
+  }
+
+  $("go").disabled = true;
+  $("result").innerHTML = `<div class="status info"><span class="spinner"></span>Fetching ${esc(B_of(t))}…</div>`;
+
+  try{
+    let data;
+    try{
+      data = await callApi(t, value);
+    } catch(err){
+      if(err.apiFail && t.fallback){
+        const f = TOOLS.find(x => x.id === t.fallback);
+        $("result").innerHTML = `<div class="status info"><span class="spinner"></span>Source busy — trying backup…</div>`;
+        data = await callApi(f, value);
+      } else throw err;
+    }
+    showResult(t, data);
+  } catch(err){
+    showError(t, err, value);
+  } finally {
+    $("go").disabled = false;
+  }
+}
+
+/* ---------- API ---------- */
+const fill = (v, a) => typeof v === "string" ? v.replaceAll("{A}", a)
+  : Array.isArray(v) ? v.map(x => fill(x, a))
+  : (v && typeof v === "object") ? Object.fromEntries(Object.entries(v).map(([k,x]) => [k, fill(x, a)])) : v;
+
+async function callApi(t, input){
+  if(!apiSet(t)) throw new Error(`API not set for "${nameOf(t)}". Paste your API in the CONFIG section.`);
+  const url = t.apiUrl.replaceAll("{A}", encodeURIComponent(input));
+  const opts = { method: t.method || "GET", headers: fill(t.headers || {}, input) };
+  if(opts.method !== "GET" && t.body){
+    opts.headers = { "Content-Type":"application/json", ...opts.headers };
+    opts.body = JSON.stringify(fill(t.body, input));
+  }
+  const ctrl = new AbortController();
+  const timer = setTimeout(() => ctrl.abort(), REQUEST_TIMEOUT_MS);
+  try{
+    const res = await fetch(url, { ...opts, signal: ctrl.signal });
+    const text = await res.text();
+    let json = null;
+    try{ json = JSON.parse(text); } catch{}
+
+    if(json && json.success === false){
+      const e = new Error(json.error || "No record returned.");
+      e.apiFail = true; e.status = res.status; throw e;
+    }
+    if(!res.ok) throw new Error(`API error ${res.status}: ${text.slice(0,160)}`);
+    if(json === null) return { result: text };
+    return json;
+  } catch(e){
+    if(e.name === "AbortError"){ const x = new Error("Request timed out."); x.timeout = true; throw x; }
+    if(e instanceof TypeError){ const x = new Error("Could not reach the API (network or CORS issue)."); x.network = true; throw x; }
+    throw e;
+  } finally { clearTimeout(timer); }
+}
+
+function stripMeta(o){
+  if(Array.isArray(o)) return o.map(stripMeta);
+  if(o && typeof o === "object"){
+    return Object.fromEntries(
+      Object.entries(o).filter(([k, v]) => !META.has(k) && !isEmpty(v)).map(([k, v]) => [k, stripMeta(v)])
+    );
+  }
+  return o;
+}
+function flatten(o, p = "", out = []){
+  if(o === null || o === undefined) return out;
+  if(Array.isArray(o)){
+    if(o.every(x => typeof x !== "object" || x === null)) { const s = o.join(", "); if(s) out.push([p || "items", s]); }
+    else o.forEach((x,i) => flatten(x, `${p}${p?" ":""}#${i+1}`, out));
+  } else if(typeof o === "object"){
+    for(const [k,v] of Object.entries(o)) flatten(v, p ? `${p} · ${k}` : k, out);
+  } else if(!isEmpty(o)) out.push([p || "value", o]);
+  return out;
+}
+function dedupe(rows){
+  const seen = new Set();
+  return rows.filter(([k, v]) => {
+    const sig = k.split(" · ").pop().trim().toLowerCase() + "\u0000" + String(v).trim().toLowerCase();
+    if(seen.has(sig)) return false;
+    seen.add(sig); return true;
+  });
+}
+function findKey(o, key){
+  if(!key || o == null || typeof o !== "object") return undefined;
+  if(key in o) return o[key];
+  for(const v of Object.values(o)){ const r = findKey(v, key); if(r !== undefined) return r; }
+}
+function cell(v){
+  const s = String(v);
+  if(/^https?:\/\/\S+\.(png|jpe?g|gif|webp|svg)(\?\S*)?$/i.test(s)) return `<img src="${esc(s)}" alt="">`;
+  if(/^https?:\/\/\S+$/i.test(s)) return `<a href="${esc(s)}" target="_blank" rel="noopener">${esc(s)}</a>`;
+  return esc(s);
+}
+
+/* ---------- family card renderer ---------- */
+const tidyRel = s => {
+  const t = String(s || "").split("(")[0].trim().toLowerCase();
+  if(!t) return "Member";
+  return t.charAt(0).toUpperCase() + t.slice(1);
+};
+function renderFamily(raw){
+  const f = findKey(raw, "family_drk_info") || {};
+  const members = Array.isArray(f.members) ? f.members : [];
+  const isSelf = m => String(m.relationship_code ?? "") === "1"
+    || /self/i.test(m.releationship_name || m.relationship_name || "");
+  const head = members.find(isSelf) || null;
+  const others = members.filter(m => m !== head);
+
+  const person = (m, asHead) => {
+    const name = String(m.memberName || "Unknown").trim();
+    const rel = asHead ? "Head of family" : tidyRel(m.releationship_name || m.relationship_name);
+    return `<div class="mem ${asHead?'head':''}">
+      <div class="ava">${esc(name.charAt(0).toUpperCase())}</div>
+      <div><div class="mn">${esc(name)}</div><div class="mr">${esc(rel)}</div></div>
+    </div>`;
+  };
+
+  const chips = [
+    ["Ration Card", f.ration_card_number],
+    ["Aadhaar", f.aadhaar],
+    ["State", f.state],
+    ["District", f.district],
+    ["FPS ID", f.fps_id],
+    ["Scheme", f.scheme],
+    ["ONORC", f.allowed_onorc],
+    ["Duplicate UID", f.dup_uid_status]
+  ].filter(([, v]) => !isEmpty(v));
+
+  return `<div class="fam">
+    <div class="fam-top">
+      <div class="fam-title">${esc(head ? head.memberName : "Family record")}</div>
+      <div class="fam-sub">${members.length || f.total_members || 0} members on this ration card${f.status ? " · " + esc(f.status) : ""}</div>
+    </div>
+    <div class="chips">${chips.map(([k,v]) => `<span class="chip"><b>${esc(k)}</b>${esc(v)}</span>`).join("")}</div>
+    ${head ? `<div class="sectitle">Head of family</div>${person(head, true)}` : ""}
+    ${others.length ? `<div class="sectitle">Other members (${others.length})</div>${others.map(m => person(m, false)).join("")}` : ""}
+    <div class="fam-foot">Relationships as recorded on the ration card.</div>
+  </div>`;
+}
+
+/* ---------- error ---------- */
+function showError(t, err, value){
+  let title = "Something went wrong", hint = "Try again in a moment.";
+  if(err.apiFail){
+    title = "No record found";
+    hint = `The provider could not resolve this ${A_of(t)}. Check the value and retry — the upstream source is flaky for fresh or unregistered numbers.`;
+  } else if(err.timeout){
+    title = "Request timed out";
+    hint = "The API took too long. Retry once — it is usually transient.";
+  } else if(err.network){
+    title = "Could not reach the API";
+    hint = "Network or CORS problem. If it persists, the host is blocking browser calls.";
+  } else if(err.message){
+    title = err.message.split(":")[0];
+    hint = err.message;
+  }
+  $("result").innerHTML = `<div class="status err">
+      <div class="msg">⚠️ ${esc(title)}</div>
+      <div class="hint">${esc(hint)}</div>
+      ${value ? `<div class="raw">Query: ${esc(value)}</div>` : ""}
+    </div>
+    <button class="retry" id="retry">Retry</button>`;
+  const r = $("retry");
+  if(r) r.onclick = () => run(t);
+}
+
+/* ---------- result ---------- */
+const rawBlock = d => `<details><summary>Raw response</summary><pre>${esc(JSON.stringify(stripMeta(d),null,2))}</pre></details>`;
+const creditBar = (label) => `<div class="rescredit"><span>✅ <b>${esc(label)}</b></span></div>`;
+
+function showResult(t, data){
+  if(t.render){
+    $("result").innerHTML = creditBar(nameOf(t)) + t.render(data) + rawBlock(data);
+    return;
+  }
+
+  const rows = dedupe(flatten(stripMeta(data)));
+  if(!rows.length){
+    $("result").innerHTML = `<div class="status warn"><div class="msg">No data found</div><div class="hint">The API answered but returned nothing usable.</div></div>`;
+    return;
+  }
+
+  const hv = findKey(stripMeta(data), t.resultKey);
+  const hero = (hv !== undefined && typeof hv !== "object" && String(hv).trim())
+    ? `<div class="hero-answer"><div class="k">${esc(B_of(t))}</div><div class="v">${esc(hv)}</div></div>` : "";
+
+  $("result").innerHTML =
+    `<div class="rescredit"><span>✅ <b>${esc(nameOf(t))}</b></span><span>${rows.length} fields</span></div>` +
+    hero +
+    `<div class="grid">${rows.map(([k,v],i) => `<div class="item" style="animation-delay:${Math.min(i,20)*30}ms"><div class="k">${esc(k)}</div><div class="v">${cell(v)}</div></div>`).join("")}</div>` +
+    rawBlock(data);
+}
+
+/* ---------- footer rotator ---------- */
+let wi = 0;
+$("rotator").textContent = ROTATING_WORDS[0];
+setInterval(() => {
+  const el = $("rotator"); el.classList.add("hide");
+  setTimeout(() => { wi = (wi + 1) % ROTATING_WORDS.length; el.textContent = ROTATING_WORDS[wi]; el.classList.remove("hide"); }, 350);
+}, ROTATE_EVERY_MS);
+
+/* ---------- live count ---------- */
+let live = LIVE_START;
+function setLive(n){
+  const el = $("liveCount"); live = n; el.textContent = n;
+  el.classList.remove("tick"); void el.offsetWidth; el.classList.add("tick");
+}
+function nextLive(){
+  let d;
+  const r = Math.random();
+  if(r < .6) d = [-2,-1,1,2][Math.floor(Math.random()*4)];
+  else if(r < .85) d = (Math.random()<.5?-1:1) * (3 + Math.floor(Math.random()*6));
+  else d = (Math.random()<.5?-1:1) * (9 + Math.floor(Math.random()*8));
+  let n = live + d;
+  if(n < LIVE_MIN || n > LIVE_MAX) n = live - d;
+  n = Math.max(LIVE_MIN, Math.min(LIVE_MAX, n));
+  if(n === live) n += (live < LIVE_MAX ? 1 : -1);
+  setLive(n);
+}
+function scheduleLive(){
+  const [a,b] = LIVE_EVERY_MS;
+  setTimeout(() => { nextLive(); scheduleLive(); }, a + Math.random()*(b-a));
+}
+setLive(LIVE_START); scheduleLive();
+
+/* ---------- premium / admin ---------- */
+let adminOn = false;
+const sw = {maintenance:false, logs:true, alerts:true};
+function openModal(html){ $("modal").className = "modal glass" + (adminOn ? " adm" : ""); $("modal").innerHTML = html; $("overlay").classList.add("open"); }
+function closeModal(){ $("overlay").classList.remove("open"); }
+$("overlay").addEventListener("mousedown", e => { if(e.target.id === "overlay") closeModal(); });
+
+function loginModal(){
+  adminOn = false;
+  openModal(`
+    <svg class="lock" viewBox="0 0 64 64"><g class="bounce"><rect x="12" y="28" width="40" height="28" rx="8" fill="#ffd60a"/><path d="M20 28v-8a12 12 0 0 1 24 0v8" fill="none" stroke="#ffd60a" stroke-width="5" stroke-linecap="round"/><circle cx="32" cy="42" r="4" fill="#1c1400"/></g></svg>
+    <h3>Premium Access</h3>
+    <p class="sub">This is for admin only — <b>Admin by R</b></p>
+    <form id="pwForm"><input class="input" id="pw" type="password" placeholder="Enter admin password" autocomplete="off" style="width:100%;text-transform:none" autofocus>
+    <button class="btn" style="width:100%;margin-top:10px" type="submit">Unlock</button></form>
+    <div class="pwerr" id="pwerr"></div>
+    <button class="close" id="closeBtn">Cancel</button>`);
+  $("closeBtn").onclick = closeModal;
+  $("pwForm").onsubmit = e => {
+    e.preventDefault();
+    if($("pw").value === ADMIN_PASSWORD){ adminOn = true; adminPanel(); }
+    else { $("pwerr").textContent = "Wrong password"; const m = $("modal"); m.classList.remove("shake"); void m.offsetWidth; m.classList.add("shake"); $("pw").value = ""; }
+  };
+  setTimeout(() => $("pw") && $("pw").focus(), 50);
+}
+function adminPanel(){
+  const setCount = TOOLS.filter(apiSet).length;
+  openModal(`
+    <div class="adm-head"><h3 style="text-align:left">Admin Panel</h3><span class="pill">ADMIN BY R</span></div>
+    <p class="sub" style="text-align:left;margin-bottom:0">Welcome back, ${esc(SITE.developer)} 👋</p>
+    <div class="stats">
+      <div class="stat"><div class="n">${live}</div><div class="l">Live now</div></div>
+      <div class="stat"><div class="n">${setCount}/${TOOLS.length}</div><div class="l">APIs connected</div></div>
+      <div class="stat"><div class="n">${VISIBLE.length}</div><div class="l">Public tools</div></div>
+    </div>
+    <h4>API Status</h4>
+    ${TOOLS.map(t => `<div class="arow"><span>${esc(nameOf(t))} <span style="color:var(--muted);font-size:12px">${t.hidden?"backup":"#"+toolNo(t)}</span></span><span class="badge ${!apiSet(t)?'no':t.hidden?'bk':'ok'}">${!apiSet(t)?'Not set':t.hidden?'Backup':'Connected'}</span></div>`).join("")}
+    <h4>Controls</h4>
+    ${[["maintenance","Maintenance mode"],["logs","Save search logs"],["alerts","Admin alerts"]].map(([k,l]) => `<div class="arow"><span>${l}</span><div class="sw ${sw[k]?'on':''}" data-k="${k}"></div></div>`).join("")}
+    <button class="btn" id="logout" style="width:100%;margin-top:14px;background:rgba(255,255,255,.14)">Log out</button>
+    <button class="close" id="closeBtn">Close</button>`);
+  document.querySelectorAll(".sw").forEach(s => s.onclick = () => { sw[s.dataset.k] = !sw[s.dataset.k]; s.classList.toggle("on"); });
+  $("logout").onclick = () => { adminOn = false; closeModal(); };
+  $("closeBtn").onclick = closeModal;
+}
+$("premBtn").onclick = () => adminOn ? adminPanel() : loginModal();
+
+render();
+</script>
+</body>
+</html>
